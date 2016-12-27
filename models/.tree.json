@@ -1,1 +1,1 @@
-{"Om0.300_Ode0.700_w-1.000_si0.800": {"1024b600": {"map_sets": {"kappaCMBBorn": {}, "kappaCMB": {}}, "catalogs": {}, "nbody": {"1": {"plane_sets": {"Planes": {}}}}}}}
+{"Om0.300_Ode0.700_w-1.000_si0.800": {"1024b600": {"map_sets": {"kappa_z100": {}, "kappa_z200": {}, "kappaCMBBorn": {}, "kappaCMB": {}, "kappa_z150": {}}, "catalogs": {}, "nbody": {"1": {"plane_sets": {"Planes": {}}}}}}}
