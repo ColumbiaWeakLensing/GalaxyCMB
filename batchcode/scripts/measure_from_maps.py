@@ -244,11 +244,6 @@ if __name__=="__main__":
 	if cmd_args.ngal is not None:
 		ngal = cmd_args.ngal
 
-	#Savename
-	savename = options["method"]
-	if add_shape_noise:
-		savename += "SN{0}".format(ngal)
-
 	#What to measure
 	try:
 		l_edges = np.linspace(*options["multipoles"])
@@ -261,8 +256,15 @@ if __name__=="__main__":
 		kappa_edges = None
 
 	measurer = measurers[options["method"]]
+	savename = options["method"]
+
 	if cmd_args.method is not None:
 		measurer = measurers[cmd_args.method]
+		savename = cmd_args.method
+
+	#Add to savename
+	if add_shape_noise:
+		savename += "SN{0}".format(ngal)
 
 	#How many chunks
 	chunks = options["chunks"]
