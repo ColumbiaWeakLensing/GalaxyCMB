@@ -47,7 +47,7 @@ def convergence_power(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,
 ##############Measure the cross power#####################################################
 ##########################################################################################
 
-def cross_powerGP(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappaGP",fnrep=("born_z","postBorn2-gp_z")):
+def cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z100",fnrep=("WLconv_z38.00","WLconv_z1.00")):
 
 	try:
 		conv = ConvergenceMap.load(map_set.path(fname))
@@ -71,8 +71,11 @@ def cross_powerGP(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal
 	except IOError:
 		return None
 
-def cross_powerLL(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappaLL",fnrep=("born_z","postBorn2-ll_z")):
-	return cross_powerGP(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
+def cross_power_z150(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z150",fnrep=("WLconv_z38.00","WLconv_z1.50")):
+	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
+
+def cross_power_z150(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z200",fnrep=("WLconv_z38.00","WLconv_z2.00")):
+	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
 
 ##############################################################################
 ##############Peak counts#####################################################
@@ -194,6 +197,7 @@ if __name__=="__main__":
 	parser.add_argument("-N","--ngal",dest="ngal",action="store",type=int,default=None,help="number of galaxies per sq arcmin")
 	parser.add_argument("-m","--maps",dest="maps",action="store",default=None,help="map sets file")
 	parser.add_argument("-C","--collection",dest="collection",action="store",default="c0",help="model collection")
+	parser.add_argument("-M","--method",dest="method",action="store",default=None,help="name of measurer method")
 	cmd_args = parser.parse_args()
 
 	#Make sure config is provided
@@ -256,6 +260,10 @@ if __name__=="__main__":
 	except TypeError:
 		kappa_edges = None
 
+	measurer = measurers[options["method"]]
+	if cmd_args.method is not None:
+		measurer = measurers[cmd_args.method]
+
 	#How many chunks
 	chunks = options["chunks"]
 
@@ -294,7 +302,7 @@ if __name__=="__main__":
 			realizations_per_chunk = num_realizations // chunks
 
 			for c in range(chunks):
-				ensemble_all.append(Ensemble.compute(map_files[realizations_per_chunk*c:realizations_per_chunk*(c+1)],callback_loader=measurers[options["method"]],pool=pool,map_set=map_set,l_edges=l_edges,kappa_edges=kappa_edges,z=redshift,smoothing=smoothing,add_shape_noise=add_shape_noise,ngal=ngal))
+				ensemble_all.append(Ensemble.compute(map_files[realizations_per_chunk*c:realizations_per_chunk*(c+1)],callback_loader=measurer,pool=pool,map_set=map_set,l_edges=l_edges,kappa_edges=kappa_edges,z=redshift,smoothing=smoothing,add_shape_noise=add_shape_noise,ngal=ngal))
 
 			#Merge all the chunks
 			ensemble_all = Ensemble.concat(ensemble_all,axis=0,ignore_index=True)
