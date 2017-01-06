@@ -300,6 +300,7 @@ if __name__=="__main__":
 
 			#Measure the descriptors spreading calculations on a MPIPool
 			map_files = glob.glob(os.path.join(map_set.storage,"*.fits"))
+			map_files.sort()
 			num_realizations = len(map_files)
 			realizations_per_chunk = num_realizations // chunks
 
