@@ -46,15 +46,16 @@ for zc in z_cross:
 
 	#Born vs raytracing
 	pb = np.load(os.path.join(batch["m0c0"].getMapSet("kappaCMBBorn").home,"cross_power_z{0}_s0_nb100.npy".format(int(zc*100))))
-	ax[1].plot(ell,ell*(ell+1)*pc.mean(0)/(2.*np.pi),label=r"$z_g={0:.2f}$".format(zc),color=line[0].get_color())
-	ax[1].plot(ell,ell*(ell+1)*pb.mean(0)/(2.*np.pi),label=r"$z_g={0:.2f}".format(zc)+r"({\rm Born})$",linestyle="--",color=line[0].get_color())
+	ax[1].plot(ell,1.-pb.mean(0)/pc.mean(0),label=r"$z_g={0:.2f}$".format(zc),color=line[0].get_color())
 
 
 #Labels
 for n in (0,1):
 	ax[n].set_xscale("log")
 	ax[n].set_xlabel(r"$\ell$",fontsize=18)
-	ax[n].set_ylabel(r"$\ell(\ell+1)P_{z_g,z_{\rm CMB}}(\ell)/2\pi$",fontsize=18)
+
+ax[0].set_ylabel(r"$\ell(\ell+1)P_{z_g,z_{\rm CMB}}(\ell)/2\pi$",fontsize=18)
+ax[1].set_ylabel(r"$1-P_{z_g,z_{\rm CMB}}^{\rm born}/P_{z_g,z_{\rm CMB}}^{\rm ray}$",fontsize=18)
 
 ax[0].legend(loc="upper left")
 ax[1].legend(loc="upper left")
