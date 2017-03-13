@@ -102,6 +102,9 @@ def cross_power_z150(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,n
 def cross_power_z200(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z200",fnrep=("_z38.00_","_z2.00_")):
 	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
 
+def cross_power_cmbrec(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappaCMBRec",fnrep=("WLconv","recTT_WLconv")):
+	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
+
 ##############################################################################
 ##############Peak counts#####################################################
 ##############################################################################
