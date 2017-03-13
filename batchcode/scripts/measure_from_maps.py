@@ -43,11 +43,36 @@ def convergence_power(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,
 	except IOError:
 		return None
 
+##################################
+##############Bispectrum##########
+##################################
+
+def bispectrum_equilateral(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0):
+	
+	try:
+		conv = ConvergenceMap.load(map_set.path(fname))
+
+		if "0001r" in fname:
+			np.save(os.path.join(map_set.home_subdir,"num_ell_nb{0}.npy".format(len(l_edges)-1)),conv.countModes(l_edges))
+	
+		if add_shape_noise:
+			gen = GaussianNoiseGenerator.forMap(conv)
+			conv = conv + gen.getShapeNoise(z=z,ngal=ngal*(u.arcmin**-2),seed=hash(os.path.basename(fname))%4294967295)
+
+		if smoothing>0.:
+			conv = conv.smooth(smoothing*u.arcmin,kind="gaussianFFT")
+
+		l,bisp = conv.bispectrum(l_edges,configuration="equilateral")
+		return bisp
+
+	except IOError:
+		return None
+
 ##########################################################################################
 ##############Measure the cross power#####################################################
 ##########################################################################################
 
-def cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z100",fnrep=("WLconv_z38.00","WLconv_z1.00")):
+def cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z100",fnrep=("_z38.00_","_z1.00_")):
 
 	try:
 		conv = ConvergenceMap.load(map_set.path(fname))
@@ -71,10 +96,10 @@ def cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,n
 	except IOError:
 		return None
 
-def cross_power_z150(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z150",fnrep=("WLconv_z38.00","WLconv_z1.50")):
+def cross_power_z150(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z150",fnrep=("_z38.00_","_z1.50_")):
 	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
 
-def cross_power_z200(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z200",fnrep=("WLconv_z38.00","WLconv_z2.00")):
+def cross_power_z200(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0,cross="kappa_z200",fnrep=("_z38.00_","_z2.00_")):
 	return cross_power_z100(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=add_shape_noise,ngal=ngal,smoothing=smoothing,cross=cross,fnrep=fnrep)
 
 ##############################################################################
