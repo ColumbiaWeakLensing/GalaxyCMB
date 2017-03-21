@@ -46,6 +46,8 @@ def convergence_power(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,
 ##################################
 ##############Bispectrum##########
 ##################################
+def _bs(ell):
+	return (ell**4)/(2.*np.pi)**2
 
 def bispectrum_equilateral(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=False,ngal=15,smoothing=0.0):
 	
@@ -62,7 +64,7 @@ def bispectrum_equilateral(fname,map_set,l_edges,kappa_edges,z,add_shape_noise=F
 		if smoothing>0.:
 			conv = conv.smooth(smoothing*u.arcmin,kind="gaussianFFT")
 
-		l,bisp = conv.bispectrum(l_edges,configuration="equilateral")
+		l,bisp = conv.bispectrum(l_edges,configuration="equilateral",scale=_bs)
 		return bisp
 
 	except IOError:
