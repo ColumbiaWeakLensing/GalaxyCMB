@@ -274,7 +274,12 @@ if __name__=="__main__":
 
 	#What to measure
 	try:
-		l_edges = np.linspace(*options["multipoles"])
+		
+		if ("ell_spacing" not in options) or (options["ell_spacing"]=="linear"):
+			l_edges = np.linspace(*options["multipoles"])
+		elif options["ell_spacing"]=="log":
+			l_edges = np.logspace(*options["multipoles"])
+
 	except TypeError:
 		l_edges = None
 
@@ -303,7 +308,11 @@ if __name__=="__main__":
 
 	#Save for reference
 	if l_edges is not None:
-		np.save(os.path.join(batch.home,"ell_nb{0}.npy".format(len(l_edges)-1)),0.5*(l_edges[1:]+l_edges[:-1]))
+
+		if ("ell_spacing" not in options) or (options["ell_spacing"]=="linear"):
+			np.save(os.path.join(batch.home,"ell_lin_nb{0}.npy".format(len(l_edges)-1)),0.5*(l_edges[1:]+l_edges[:-1]))
+		elif options["ell_spacing"]=="log":
+			np.save(os.path.join(batch.home,"ell_log_nb{0}.npy".format(len(l_edges)-1)),0.5*(l_edges[1:]+l_edges[:-1]))
 	
 	if kappa_edges is not None:
 		np.save(os.path.join(batch.home,"kappa_nb{0}.npy".format(len(kappa_edges)-1)),0.5*(kappa_edges[1:]+kappa_edges[:-1]))
