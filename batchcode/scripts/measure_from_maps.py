@@ -344,7 +344,16 @@ if __name__=="__main__":
 			realizations_per_chunk = num_realizations // chunks
 
 			for c in range(chunks):
-				ensemble_all.append(Ensemble.compute(map_files[realizations_per_chunk*c:realizations_per_chunk*(c+1)],callback_loader=measurer,pool=pool,map_set=map_set,l_edges=l_edges,kappa_edges=kappa_edges,z=redshift,smoothing=smoothing,add_shape_noise=add_shape_noise,ngal=ngal))
+				ensemble_all.append(Ensemble.compute(map_files[realizations_per_chunk*c:realizations_per_chunk*(c+1)],
+					callback_loader=measurer,
+					pool=pool,
+					map_set=map_set,
+					l_edges=l_edges,
+					kappa_edges=kappa_edges,
+					z=redshift,
+					smoothing=smoothing,
+					add_shape_noise=add_shape_noise,
+					ngal=ngal))
 
 			#Merge all the chunks
 			ensemble_all = Ensemble.concat(ensemble_all,axis=0,ignore_index=True)
